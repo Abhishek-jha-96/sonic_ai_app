@@ -74,4 +74,8 @@ export const selectCurrentUser = (state: { users: typeof initialState }) => {
   return userId ? userSelectors.selectById(state, userId) : null;
 };
 
+export const selectAuthStatus = (state: { users: typeof initialState }) =>{
+  return state.users.auth.status;
+};
+
 export default userSlice.reducer;

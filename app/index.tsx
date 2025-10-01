@@ -1,7 +1,25 @@
 import CornerRadialGradient from "@/components/ui/CornerRadialGradient";
+import { useSelector } from "react-redux";
 import { StyleSheet, Text, View } from "react-native";
+import { selectAuthStatus } from "@/store/User/userSlice";
+import { useEffect } from "react";
+import { router } from "expo-router";
 
 export default function StartScreen() {
+  const currAuthStatus = useSelector(selectAuthStatus);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (currAuthStatus === "authenticated") {
+        router.replace("/home");
+      } else {
+        router.replace("/login");
+      }
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [currAuthStatus]);
+
   return (
     <View style={styles.container}>
       {/* Top Left */}
