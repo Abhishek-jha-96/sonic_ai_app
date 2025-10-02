@@ -13,7 +13,7 @@ export default function StartScreen() {
       if (currAuthStatus === "authenticated") {
         router.replace("/home");
       } else {
-        router.replace("/login");
+        router.replace("/auth");
       }
     }, 2200);
 

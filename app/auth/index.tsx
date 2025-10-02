@@ -1,0 +1,74 @@
+import Divider from "@/components/ui/auth/divider";
+import LoginOptionButton from "@/components/ui/auth/loginOptionButton";
+import { Link } from "expo-router";
+import { StyleSheet, Text, View } from "react-native";
+
+
+const icons = {
+    sms: require("../../assets/images/sms.svg"),
+    google: require("../../assets/images/google.svg"),
+};
+
+export default function LoginScreen() {
+    return (
+        <View style={styles.container}>
+            {/* Header Text */}
+            <View style={styles.headerTextContainer}>
+                <Text style={styles.headTextMail}>Let's Get Started!</Text>
+                <Text style={styles.headTextPara}>Discover the latest 1000+ Voice Effects</Text>
+            </View>
+
+
+            {/* Login with email */}
+            <LoginOptionButton imgPath={icons.sms} text="Continue with Email" />
+
+            <Divider />
+
+            {/* Other Login Options */}
+            <LoginOptionButton imgPath={icons.google} text="Continue with Google" />
+
+
+            {/* Already have an account? Sign in */}
+            <View style={styles.footerTextContainer}>
+                <Text style={styles.headTextPara}>Already have an account?</Text>
+                <Link href="/auth"><Text style={styles.linkText}>Sign in</Text></Link>
+            </View>
+
+        </View>
+    )
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1, // <--- this makes it take full screen
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 12
+    },
+    headerTextContainer: {
+        gap: 4
+    },
+    headTextMail: {
+        color: 'white',
+        fontSize: 20,
+        fontWeight: 'medium',
+        textAlign: 'center',
+    },
+    headTextPara: {
+        color: 'white',
+        fontSize: 13,
+        fontWeight: 'light',
+        textAlign: 'center',
+    },
+    linkText: {
+        color: '#B3B1FF',
+        fontSize: 13,
+        fontWeight: 'light',
+        textAlign: 'center',
+    },
+    footerTextContainer: {
+        flexDirection: 'row',
+        gap: 4
+    }
+})
