@@ -1,8 +1,8 @@
 import CornerRadialGradient from "@/components/ui/CornerRadialGradient";
 import { useSelector } from "react-redux";
-import { StyleSheet, Text, View } from "react-native";
+import { Animated, StyleSheet, Text, View } from "react-native";
 import { selectAuthStatus } from "@/store/User/userSlice";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { router } from "expo-router";
 
 export default function StartScreen() {
@@ -15,10 +15,33 @@ export default function StartScreen() {
       } else {
         router.replace("/login");
       }
-    }, 3000);
+    }, 2200);
 
     return () => clearTimeout(timer);
   }, [currAuthStatus]);
+
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  // blinking animation loop
+  useEffect(() => {
+    const blink = Animated.loop(
+      Animated.sequence([
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 360,
+          useNativeDriver: true,
+        }),
+        Animated.timing(fadeAnim, {
+          toValue: 0,
+          duration: 360,
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    blink.start();
+
+    return () => blink.stop(); // cleanup
+  }, [fadeAnim]);
 
   return (
     <View style={styles.container}>
@@ -33,7 +56,9 @@ export default function StartScreen() {
       />
 
       <Text style={styles.mainText}>
-        Sonic <Text style={styles.mainColoredText}>AI</Text>
+        Sonic <Animated.Text style={[styles.mainColoredText, { opacity: fadeAnim }]}>
+          AI
+          </Animated.Text>
       </Text>
 
       {/* Bottom Right */}
@@ -54,7 +79,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "black", // contrast background
+    backgroundColor: "black",
     overflow: "hidden",
   },
   mainText: {
