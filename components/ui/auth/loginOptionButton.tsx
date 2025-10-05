@@ -1,4 +1,4 @@
-import { Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, useWindowDimensions } from "react-native";
 
 interface LoginOptionProps {
     imgPath: ImageSourcePropType;
@@ -6,8 +6,12 @@ interface LoginOptionProps {
 }
 
 export default function LoginOptionButton({ imgPath, text }: LoginOptionProps) {
+    const { width } = useWindowDimensions();
+    
+    const buttonWidth = width < 360 ? width * 0.8 : 284;
+
     return (
-        <TouchableOpacity style={styles.container}>
+        <TouchableOpacity style={[styles.container, { width: buttonWidth }]}>
             <Image source={imgPath} />
             <Text style={styles.text}>{text}</Text>
             <Text> </Text>
@@ -17,6 +21,8 @@ export default function LoginOptionButton({ imgPath, text }: LoginOptionProps) {
 
 const styles = StyleSheet.create({
     container: {
+        display: 'flex',
+        justifyContent: 'space-between',
         maxWidth: 324,
         maxHeight: 72,
         backgroundColor: '#343435',
