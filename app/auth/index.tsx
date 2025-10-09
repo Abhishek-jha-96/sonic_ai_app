@@ -1,6 +1,6 @@
 import Divider from "@/components/ui/auth/divider";
 import LoginOptionButton from "@/components/ui/auth/loginOptionButton";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 
 
@@ -10,6 +10,10 @@ const icons = {
 };
 
 export default function LoginScreen() {
+    const handleEmailSignInPress = () => {
+        router.push("/auth/sign-up");    
+    }
+
     return (
         <View style={styles.container}>
             {/* Header Text */}
@@ -20,7 +24,7 @@ export default function LoginScreen() {
 
 
             {/* Login with email */}
-            <LoginOptionButton imgPath={icons.sms} text="Continue with Email" />
+            <LoginOptionButton imgPath={icons.sms} text="Continue with Email" onPressHandler={handleEmailSignInPress}/>
 
             <Divider />
 
