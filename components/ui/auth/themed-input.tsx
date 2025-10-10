@@ -18,14 +18,14 @@ export default function ThemedInput({ imgPath, placeHolder }: ThemedInputProps) 
             style={[
                 styles.container,
                 { width: inputBoxWidth },
-                isFocused && styles.focusedContainer, // highlight border when focused
+                isFocused && styles.focusedContainer,
             ]}
         >
             <Image source={imgPath} />
             <TextInput
                 style={styles.inputContainer}
                 placeholder={placeHolder}
-                placeholderTextColor="rgba(255, 255, 255, 0.5)" // less opaque placeholder
+                placeholderTextColor="rgba(255, 255, 255, 0.5)"
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
                 underlineColorAndroid="transparent"
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         borderColor: 'transparent',
     },
     focusedContainer: {
-        borderColor: '#B3B1FF', // highlight color when input is focused
+        borderColor: '#B3B1FF',
     },
     inputContainer: {
         flex: 1,
