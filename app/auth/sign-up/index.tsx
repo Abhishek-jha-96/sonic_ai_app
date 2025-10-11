@@ -1,6 +1,7 @@
 import { ThemedText } from '@/components/themed-text'
 import { ThemedView } from '@/components/themed-view'
 import ThemedInput from '@/components/ui/auth/themed-input'
+import BackButton from '@/components/ui/common/BackButton'
 import { Link } from 'expo-router'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 
@@ -12,6 +13,7 @@ const icons = {
 export default function SignUpScreen() {
     return (
         <ThemedView style={styles.mainContainer}>
+            <BackButton path='/auth'/>
             <ThemedView style={styles.innerContainer}>
                 {/* Header */}
                 <ThemedView>
@@ -66,7 +68,7 @@ const styles = StyleSheet.create({
         height: '100%',
         flexDirection: 'column',
         alignItems: 'center',
-        paddingTop: 64,
+        paddingTop: 120,
     },
     headerText: {
         textAlign: 'center',
