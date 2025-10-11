@@ -41,3 +41,7 @@ app-example
 # generated native folders
 /ios
 /android
+
+
+# Project related
+sonic_google_oauth_client.json
