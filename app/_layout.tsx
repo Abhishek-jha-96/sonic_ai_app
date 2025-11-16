@@ -1,20 +1,18 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DarkTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import 'react-native-reanimated';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Provider } from 'react-redux';
 import { store } from '@/store/store';
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
 
   return (
     <Provider store={store}>
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={DarkTheme}>
       <Stack>
-        <Stack.Screen name="home" />
-        <Stack.Screen name="auth" />
+        <Stack.Screen name="home" options={{ headerShown: false }} />
+        <Stack.Screen name="auth" options={{ headerShown: false }} />
       </Stack>
     </ThemeProvider>
     </Provider>
