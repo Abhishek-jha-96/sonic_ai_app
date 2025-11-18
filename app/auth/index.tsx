@@ -2,11 +2,13 @@ import Divider from "@/components/ui/auth/divider";
 import LoginOptionButton from "@/components/ui/auth/loginOptionButton";
 import { Link, router } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
+import SmsIcon from "@/assets/images/sms.svg";
+import GoogleIcon from "@/assets/images/google.svg";
 
 
 const icons = {
-    sms: require("../../assets/images/sms.svg"),
-    google: require("../../assets/images/google.svg"),
+    sms: SmsIcon,
+    google: GoogleIcon,
 };
 
 export default function LoginScreen() {
@@ -24,12 +26,12 @@ export default function LoginScreen() {
 
 
             {/* Login with email */}
-            <LoginOptionButton imgPath={icons.sms} text="Continue with Email" onPressHandler={handleEmailSignInPress}/>
+            <LoginOptionButton Icon={icons.sms} text="Continue with Email" onPressHandler={handleEmailSignInPress}/>
 
             <Divider />
 
             {/* Other Login Options */}
-            <LoginOptionButton imgPath={icons.google} text="Continue with Google" />
+            <LoginOptionButton Icon={icons.google} text="Continue with Google" />
 
 
             {/* Already have an account? Sign in */}

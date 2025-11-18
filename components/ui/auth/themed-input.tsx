@@ -9,7 +9,7 @@ import {
 } from "react-native";
 
 interface ThemedInputProps {
-  imgPath: ImageSourcePropType;
+  Icon: React.ComponentType<any>;
   placeHolder: string;
   value: string;
   onChangeText: (text: string) => void;
@@ -17,7 +17,7 @@ interface ThemedInputProps {
 }
 
 export default function ThemedInput({
-  imgPath,
+  Icon,
   placeHolder,
   value,
   onChangeText,
@@ -35,7 +35,7 @@ export default function ThemedInput({
         isFocused && styles.focusedContainer,
       ]}
     >
-      <Image source={imgPath} />
+      <Icon width={20} height={20} />
       <TextInput
         style={styles.inputContainer}
         placeholder={placeHolder}
@@ -68,7 +68,9 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flex: 1,
-    height: 24,
     color: "white",
+    fontSize: 16,
+    paddingVertical: 8,
+    textAlignVertical: "center",
   },
 });

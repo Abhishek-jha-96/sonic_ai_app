@@ -6,10 +6,13 @@ import { useCreateUserMutation } from "@/store/User/userApi";
 import { Link } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, TouchableOpacity } from "react-native";
+import SmsIcon from "@/assets/images/sms.svg";
+import LockIcon from "@/assets/images/lock.svg";
+
 
 const icons = {
-  sms: require("../../../assets/images/sms.svg"),
-  lock: require("../../../assets/images/lock.svg"),
+  sms: SmsIcon,
+  lock: LockIcon,
 };
 
 export default function SignUpScreen() {
@@ -69,7 +72,7 @@ export default function SignUpScreen() {
           rules={{ required: "Email is required" }}
           render={({ field: { onChange, value } }) => (
             <ThemedInput
-              imgPath={icons.sms}
+              Icon={icons.sms}
               placeHolder="Email"
               value={value}
               onChangeText={onChange}
@@ -83,7 +86,7 @@ export default function SignUpScreen() {
           rules={{ required: "Password is required" }}
           render={({ field: { onChange, value } }) => (
             <ThemedInput
-              imgPath={icons.lock}
+              Icon={icons.lock}
               placeHolder="Password"
               value={value}
               onChangeText={onChange}
@@ -101,7 +104,7 @@ export default function SignUpScreen() {
           }}
           render={({ field: { onChange, value } }) => (
             <ThemedInput
-              imgPath={icons.lock}
+              Icon={icons.lock}
               placeHolder="Confirm Password"
               value={value}
               onChangeText={onChange}
