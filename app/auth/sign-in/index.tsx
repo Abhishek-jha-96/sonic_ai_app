@@ -82,53 +82,55 @@ export default function SignInScreen() {
 
 const styles = StyleSheet.create({
   mainContainer: {
-    display: "flex",
-    height: "100%",
-    flexDirection: "column",
-    alignItems: "center",
+    flex: 1,
     paddingTop: 120,
   },
+
   headerText: {
     textAlign: "center",
   },
+
   headerSubText: {
     textAlign: "center",
     maxWidth: 294,
     fontSize: 14,
-    fontWeight: "regular",
+    fontWeight: "400",
   },
+
   innerContainer: {
-    display: "flex",
     flexDirection: "column",
     alignItems: "center",
     gap: 20,
   },
+
   signUpButton: {
-    display: "flex",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     width: 324,
     height: 48,
     backgroundColor: "#B3B1FF",
-    paddingHorizontal: 16,
-    paddingVertical: 13,
-    gap: 32,
     borderRadius: 12,
   },
+
   signUpButtonText: {
-    color: "Black",
+    color: "black",
     fontSize: 15,
-    fontWeight: "semibold",
+    fontWeight: "600",
   },
+
   footerContainer: {
-    display: "flex",
     flexDirection: "row",
     justifyContent: "center",
     gap: 4,
+    marginTop: 10,
   },
+
   linkText: {
     color: "#B3B1FF",
-    textAlign: "center",
+  },
+
+  footerText: {
+    color: "white",
   },
 });
