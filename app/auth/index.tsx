@@ -1,10 +1,17 @@
+import GoogleIcon from "@/assets/images/google.svg";
+import SmsIcon from "@/assets/images/sms.svg";
 import Divider from "@/components/ui/auth/divider";
 import LoginOptionButton from "@/components/ui/auth/loginOptionButton";
+import { useLazyGetUserInfoQuery } from "@/store/User/googleAuthApi";
+import { addUser, loginSuccess } from "@/store/User/userSlice";
+import * as Google from "expo-auth-session/providers/google";
 import { Link, router } from "expo-router";
+import * as WebBrowser from "expo-web-browser";
+import { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import SmsIcon from "@/assets/images/sms.svg";
-import GoogleIcon from "@/assets/images/google.svg";
+import { useDispatch } from "react-redux";
 
+WebBrowser.maybeCompleteAuthSession();
 
 const icons = {
     sms: SmsIcon,
@@ -12,8 +19,45 @@ const icons = {
 };
 
 export default function LoginScreen() {
+    const dispatch = useDispatch();
+    const [request, response, promptAsync] = Google.useAuthRequest({
+        // TODO: Replace with actual Client IDs from Google Cloud Console
+        iosClientId: "GOOGLE_GUID.apps.googleusercontent.com",
+        androidClientId: "GOOGLE_GUID.apps.googleusercontent.com",
+        webClientId: "GOOGLE_GUID.apps.googleusercontent.com",
+    });
+
+    const [triggerGetUserInfo, { data: userInfo }] = useLazyGetUserInfoQuery();
+
+    useEffect(() => {
+        if (response?.type === "success") {
+            const { authentication } = response;
+            if (authentication?.accessToken) {
+                triggerGetUserInfo(authentication.accessToken);
+            }
+        }
+    }, [response]);
+
+    useEffect(() => {
+        if (userInfo) {
+            console.log("User Info:", userInfo);
+            const user = {
+                id: userInfo.id,
+                name: userInfo.name,
+                email: userInfo.email,
+            };
+            dispatch(addUser(user));
+            dispatch(loginSuccess({ userId: user.id, token: response?.type === "success" ? response.authentication?.accessToken || "" : "" }));
+            // Navigate or perform other actions if needed
+        }
+    }, [userInfo]);
+
     const handleEmailSignInPress = () => {
-        router.push("/auth/sign-up");    
+        router.push("/auth/sign-up");
+    }
+
+    const handleGoogleSignIn = () => {
+        promptAsync();
     }
 
     return (
@@ -26,12 +70,12 @@ export default function LoginScreen() {
 
 
             {/* Login with email */}
-            <LoginOptionButton Icon={icons.sms} text="Continue with Email" onPressHandler={handleEmailSignInPress}/>
+            <LoginOptionButton Icon={icons.sms} text="Continue with Email" onPressHandler={handleEmailSignInPress} />
 
             <Divider />
 
             {/* Other Login Options */}
-            <LoginOptionButton Icon={icons.google} text="Continue with Google" />
+            <LoginOptionButton Icon={icons.google} text="Continue with Google" onPressHandler={handleGoogleSignIn} />
 
 
             {/* Already have an account? Sign in */}
@@ -46,7 +90,7 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1, // <--- this makes it take full screen
+        flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
