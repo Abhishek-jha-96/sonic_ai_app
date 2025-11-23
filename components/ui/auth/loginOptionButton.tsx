@@ -1,19 +1,19 @@
 import { Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, useWindowDimensions } from "react-native";
 
 interface LoginOptionProps {
-    imgPath: ImageSourcePropType;
+    Icon: React.ComponentType<any>;
     text: string;
     onPressHandler?: () => void
 }
 
-export default function LoginOptionButton({ imgPath, text, onPressHandler }: LoginOptionProps) {
+export default function LoginOptionButton({ Icon, text, onPressHandler }: LoginOptionProps) {
     const { width } = useWindowDimensions();
     
     const buttonWidth = width < 360 ? width * 0.8 : 284;
 
     return (
         <TouchableOpacity onPress={onPressHandler} style={[styles.container, { width: buttonWidth }]}>
-            <Image source={imgPath} />
+            <Icon width={20} height={20} />
             <Text style={styles.text}>{text}</Text>
             <Text> </Text>
         </TouchableOpacity>

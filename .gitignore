@@ -45,3 +45,4 @@ app-example
 
 # Project related
 sonic_google_oauth_client.json
+.env
