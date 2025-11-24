@@ -2,7 +2,7 @@ import GoogleIcon from "@/assets/images/google.svg";
 import SmsIcon from "@/assets/images/sms.svg";
 import Divider from "@/components/ui/auth/divider";
 import LoginOptionButton from "@/components/ui/auth/loginOptionButton";
-import { useLazyGetUserInfoQuery } from "@/store/User/googleAuthApi";
+import { useLazyGetUserInfoQuery } from "@/store/Auth/googleAuthApi";
 import { addUser, loginSuccess } from "@/store/User/userSlice";
 import * as Google from "expo-auth-session/providers/google";
 import { Link, router } from "expo-router";

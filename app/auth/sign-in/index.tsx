@@ -66,7 +66,7 @@ export default function SignInScreen() {
 
         {/* Sign Up Button */}
         <TouchableOpacity activeOpacity={0.8} style={styles.signUpButton}>
-          <ThemedText style={styles.signUpButtonText}>Sign Up</ThemedText>
+          <ThemedText style={styles.signUpButtonText}>Sign In</ThemedText>
         </TouchableOpacity>
 
         {/* Footer */}

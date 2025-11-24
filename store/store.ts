@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./User/userSlice";
-import { googleAuthApi } from "./User/googleAuthApi";
+import { googleAuthApi } from "./Auth/googleAuthApi";
 
 export const store = configureStore({
   reducer: {
