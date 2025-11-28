@@ -31,24 +31,21 @@ export default function SignUpScreen() {
   const password = watch("password");
 
   const handleSignUp = async (values: any) => {
-    console.log("logging with email");
-    if (auth_provider === "email") {
-      const { email, password } = values;
-      try {
-        console.log(email, password, auth_provider);
-        const user = await createUser({
-          email,
-          password,
-          auth_provider,
-        }).unwrap();
-        console.log(user);
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (auth_provider === "google") {
-      // will add google oauth related flow later.
-      console.log("Sign up with Google");
+    console.log("signing up with email");
+
+    const { email, password } = values;
+    try {
+      console.log(email, password, auth_provider);
+      const user = await createUser({
+        email,
+        password,
+        auth_provider,
+      }).unwrap();
+      console.log(user);
+    } catch (error) {
+      console.log(error);
     }
+
   };
 
   return (

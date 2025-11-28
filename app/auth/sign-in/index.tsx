@@ -7,6 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import SmsIcon from "@/assets/images/sms.svg";
 import LockIcon from "@/assets/images/lock.svg";
+import { useLoginMutation } from "@/store/Auth/authApi";
 
 
 const icons = {
@@ -15,12 +16,29 @@ const icons = {
 };
 
 export default function SignInScreen() {
+  const [login, {isLoading}] = useLoginMutation();
   const { control, handleSubmit, watch } = useForm({
     defaultValues: {
       email: "",
       password: "",
     },
   });
+
+  const handleSignIn = async (data: any) => {
+    console.log("logging in with email");
+    const { email, password } = data;
+    try {
+      console.log(email, password);
+      const user = await login({
+        email,
+        password,
+      }).unwrap();
+      console.log(user);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <ThemedView style={styles.mainContainer}>
       <BackButton path="/auth" />
@@ -65,7 +83,7 @@ export default function SignInScreen() {
         />
 
         {/* Sign Up Button */}
-        <TouchableOpacity activeOpacity={0.8} style={styles.signUpButton}>
+        <TouchableOpacity activeOpacity={0.8} onPress={handleSubmit(handleSignIn)} style={styles.signUpButton}>
           <ThemedText style={styles.signUpButtonText}>Sign In</ThemedText>
         </TouchableOpacity>
 
