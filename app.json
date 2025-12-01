@@ -9,7 +9,8 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.abhishekjha.sonicaiapp"
     },
     "android": {
       "package": "com.abhishekjha.sonicaiapp",
