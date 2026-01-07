@@ -3,8 +3,8 @@ import { createSlice, createEntityAdapter, PayloadAction } from "@reduxjs/toolki
 // User type
 export interface User {
   id: string;
-  name: string;
-  email: string;
+  name: string | null;
+  email: string | null;
 }
 
 // Adapter for normalized user collection
@@ -33,7 +33,7 @@ const userSlice = createSlice({
     // --- Auth operations ---
     loginSuccess: (
       state,
-      action: PayloadAction<{ userId: string; token: string }>
+      action: PayloadAction<{ userId: string; token: string | null }>
     ) => {
       state.auth.userId = action.payload.userId;
       state.auth.token = action.payload.token;
