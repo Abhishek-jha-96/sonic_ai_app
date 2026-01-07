@@ -1,13 +1,12 @@
 import { DarkTheme, ThemeProvider } from "@react-navigation/native";
-import { Stack } from "expo-router";
 import "react-native-reanimated";
 
 import * as WebBrowser from "expo-web-browser";
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
-import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-expo";
+import { ClerkProvider } from "@clerk/clerk-expo";
 import { tokenCache } from "@/utils/clerkTokenCache";
-import { ClerkReduxSync } from "./auth/clerkReduxSync";
+import { AuthGate } from "./AuthGate";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -19,15 +18,7 @@ export default function RootLayout() {
           publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!}
           tokenCache={tokenCache}
         >
-          <Stack>
-            <SignedIn>
-              <ClerkReduxSync />
-              <Stack.Screen name="home" options={{ headerShown: false }} />
-            </SignedIn>
-            <SignedOut>
-              <Stack.Screen name="auth" options={{ headerShown: false }} />
-            </SignedOut>
-          </Stack>
+          <AuthGate />
         </ClerkProvider>
       </ThemeProvider>
     </Provider>

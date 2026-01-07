@@ -1,25 +1,8 @@
 import CornerRadialGradient from "@/components/ui/CornerRadialGradient";
-import { useSelector } from "react-redux";
 import { Animated, StyleSheet, Text, View } from "react-native";
-import { selectAuthStatus } from "@/store/User/userSlice";
 import { useEffect, useRef } from "react";
-import { router } from "expo-router";
 
 export default function StartScreen() {
-  const currAuthStatus = useSelector(selectAuthStatus);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (currAuthStatus === "authenticated") {
-        router.replace("/home");
-      } else {
-        router.replace("/auth");
-      }
-    }, 2200);
-
-    return () => clearTimeout(timer);
-  }, [currAuthStatus]);
-
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   // blinking animation loop
