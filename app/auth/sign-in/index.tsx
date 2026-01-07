@@ -7,7 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import SmsIcon from "@/assets/images/sms.svg";
 import LockIcon from "@/assets/images/lock.svg";
-import { useLoginMutation } from "@/store/Auth/authApi";
+import { useSignIn } from "@clerk/clerk-expo";
 
 
 const icons = {
@@ -16,7 +16,8 @@ const icons = {
 };
 
 export default function SignInScreen() {
-  const [login, {isLoading}] = useLoginMutation();
+  const { signIn, setActive, isLoaded } = useSignIn();
+
   const { control, handleSubmit, watch } = useForm({
     defaultValues: {
       email: "",
@@ -27,16 +28,16 @@ export default function SignInScreen() {
   const handleSignIn = async (data: any) => {
     console.log("logging in with email");
     const { email, password } = data;
-    try {
-      console.log(email, password);
-      const user = await login({
-        email,
-        password,
-      }).unwrap();
-      console.log(user);
-    } catch (error) {
-      console.log(error);
-    }
+    
+    if(!isLoaded) return;
+
+    const result = await signIn.create({
+      identifier: email,
+      password,
+    })
+
+    console.log(result);
+    await setActive({ session: result.createdSessionId });
   };
 
   return (
