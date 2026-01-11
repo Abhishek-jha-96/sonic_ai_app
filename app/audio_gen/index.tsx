@@ -1,19 +1,3 @@
-import { StyleSheet, Text, View } from "react-native";
-import WelcomeScreen from "./welcomeScreen";
-import TTSCard from "./ttsCard";
-
-export default function AudioGenScreen() {
-    return (
-        <View style={styles.container}>
-            <WelcomeScreen />
-            <TTSCard />
-        </View>
-    );
+export default function AudioGen() {
+    return <div>AudioGen</div>;
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: "center"
-    }
-});

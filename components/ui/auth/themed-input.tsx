@@ -1,12 +1,6 @@
 import { ThemedView } from "@/components/themed-view";
 import { useState } from "react";
-import {
-  Image,
-  ImageSourcePropType,
-  StyleSheet,
-  TextInput,
-  useWindowDimensions,
-} from "react-native";
+import { StyleSheet, TextInput, useWindowDimensions } from "react-native";
 
 interface ThemedInputProps {
   Icon: React.ComponentType<any>;
