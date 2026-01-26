@@ -4,11 +4,13 @@ import ThemedInput from "@/components/ui/auth/themed-input";
 import BackButton from "@/components/ui/common/BackButton";
 import { Link } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 import SmsIcon from "@/assets/images/sms.svg";
 import LockIcon from "@/assets/images/lock.svg";
 import { useSignIn } from "@clerk/clerk-expo";
-
+import { isClerkAPIResponseError } from "@clerk/clerk-expo";
+import { useState } from "react";
+import Toast from "@/components/ui/common/toast";
 
 const icons = {
   sms: SmsIcon,
@@ -17,6 +19,8 @@ const icons = {
 
 export default function SignInScreen() {
   const { signIn, setActive, isLoaded } = useSignIn();
+  const [toastVisible, setToastVisible] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
   const { control, handleSubmit, watch } = useForm({
     defaultValues: {
@@ -26,18 +30,33 @@ export default function SignInScreen() {
   });
 
   const handleSignIn = async (data: any) => {
-    console.log("logging in with email");
     const { email, password } = data;
-    
-    if(!isLoaded) return;
 
-    const result = await signIn.create({
-      identifier: email,
-      password,
-    })
+    if (!isLoaded) return;
 
-    console.log(result);
-    await setActive({ session: result.createdSessionId });
+    try {
+      const result = await signIn.create({
+        identifier: email,
+        password,
+      });
+      console.log(result.status)
+      await setActive({ session: result.createdSessionId });
+    } catch (err: unknown) {
+      let message = "Something went wrong. Please try again.";
+      if (isClerkAPIResponseError(err)) {
+        message =
+          err.errors?.[0]?.longMessage ||
+          err.errors?.[0]?.message ||
+          "Unable to sign in";
+      }
+
+      setToastVisible(false);
+      setTimeout(() => {
+        setToastMessage(message);
+        setToastVisible(true);
+      }, 50);
+      control._reset();
+    }
   };
 
   return (
@@ -84,7 +103,12 @@ export default function SignInScreen() {
         />
 
         {/* Sign Up Button */}
-        <TouchableOpacity activeOpacity={0.8} onPress={handleSubmit(handleSignIn)} style={styles.signUpButton}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={handleSubmit(handleSignIn)}
+          style={styles.signUpButton}
+          disabled={toastVisible}
+        >
           <ThemedText style={styles.signUpButtonText}>Sign In</ThemedText>
         </TouchableOpacity>
 
@@ -98,6 +122,12 @@ export default function SignInScreen() {
           </TouchableOpacity>
         </ThemedView>
       </ThemedView>
+      <Toast
+        visible={toastVisible}
+        message={toastMessage}
+        duration={4000}
+        onClose={() => setToastVisible(false)}
+      />
     </ThemedView>
   );
 }
