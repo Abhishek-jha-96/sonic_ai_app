@@ -3,8 +3,11 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import SpeechIcon from "@/assets/images/speech.svg";
 import { router } from "expo-router";
+import { selectCurrentUser } from "@/store/User/userSlice";
+import { useSelector } from "react-redux";
 
 export default function HomeScreen() {
+  const user = useSelector(selectCurrentUser);
   
   const handleCreatePress = () => {
     router.push("/audio_gen");
@@ -12,7 +15,7 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.heading}>
-        <Avatar name={"JD"} />
+        <Avatar name={user?.name?.slice(0, 1) || "NA"} />
         <Text style={styles.mainText}>Welcome Back!</Text>
       </View>
 

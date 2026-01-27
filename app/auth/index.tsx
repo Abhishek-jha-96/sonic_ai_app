@@ -2,7 +2,6 @@ import GoogleIcon from "@/assets/images/google.svg";
 import SmsIcon from "@/assets/images/sms.svg";
 import Divider from "@/components/ui/auth/divider";
 import LoginOptionButton from "@/components/ui/auth/loginOptionButton";
-import { addUser, loginSuccess } from "@/store/User/userSlice";
 import { router } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import { useDispatch } from "react-redux";

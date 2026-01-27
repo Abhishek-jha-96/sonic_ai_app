@@ -2,9 +2,9 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import ThemedInput from "@/components/ui/auth/themed-input";
 import BackButton from "@/components/ui/common/BackButton";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
-import { Alert, StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import SmsIcon from "@/assets/images/sms.svg";
 import LockIcon from "@/assets/images/lock.svg";
 import { useSignIn } from "@clerk/clerk-expo";
@@ -41,6 +41,7 @@ export default function SignInScreen() {
       });
       console.log(result.status)
       await setActive({ session: result.createdSessionId });
+      router.replace("/home");
     } catch (err: unknown) {
       let message = "Something went wrong. Please try again.";
       if (isClerkAPIResponseError(err)) {

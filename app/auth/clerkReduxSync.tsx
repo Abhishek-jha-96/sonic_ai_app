@@ -3,6 +3,7 @@ import { useUser, useAuth } from "@clerk/clerk-expo";
 import { useDispatch } from "react-redux";
 import { addUser, loginSuccess } from "@/store/User/userSlice";
 
+
 export function ClerkReduxSync() {
   const dispatch = useDispatch();
   const { user, isLoaded } = useUser();
