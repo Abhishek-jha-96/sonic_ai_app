@@ -1,9 +1,8 @@
 import * as FileSystem from 'expo-file-system';
 import { InferenceSession, Tensor } from 'onnxruntime-react-native';
 import { Audio } from 'expo-av';
-import { VOICES, getVoiceData } from './voices';
 import { Platform } from 'react-native';
-import { MODELS } from './models';
+import { getVoiceData } from './voices';
 
 // Constants
 const SAMPLE_RATE = 24000;
@@ -21,7 +20,7 @@ const VOCAB = (() => {
   const _letters_ipa = "ɑɐɒæɓʙβɔɕçɗɖðʤəɘɚɛɜɝɞɟʄɡɠɢʛɦɧħɥʜɨɪʝɭɬɫɮʟɱɯɰŋɳɲɴøɵɸθœɶʘɹɺɾɻʀʁɽʂʃʈʧʉʊʋⱱʌɣɤʍχʎʏʑʐʒʔʡʕʢǀǁǂǃˈˌːˑʼʴʰʱʲʷˠˤ˞↓↑→↗↘'̩'ᵻ";
   
   const symbols = [_pad, ..._punctuation.split(''), ..._letters.split(''), ..._letters_ipa.split('')];
-  const dicts = {};
+  const dicts: { [key: string]: number } = {};
   
   for (let i = 0; i < symbols.length; i++) {
     dicts[symbols[i]] = i;
@@ -48,7 +47,7 @@ const ENGLISH_PHONEME_MAP = {
   'or': 'ɔɹ',
   'ir': 'ɪɹ',
   'ur': 'ʊɹ',
-};
+} as const;
 
 // Common word to phoneme mappings
 const COMMON_WORD_PHONEMES = {
@@ -71,9 +70,25 @@ const COMMON_WORD_PHONEMES = {
   'with': 'wˈɪð',
   'onnx': 'ˈɑːnɛks',
   'runtime': 'ɹˈʌntaɪm',
-};
+} as const;
 
 class KokoroOnnx {
+  session: InferenceSession | null;
+  isModelLoaded: boolean;
+  voiceCache: Map<string, Audio.Sound>;
+  isOnnxAvailable: boolean;
+  currentModelId: string | null;
+  isStreaming: boolean;
+  streamingSound: Audio.Sound | null;
+  streamingStartTime: number | null;
+  tokensProcessed: number;
+  tokensPerSecond: number;
+  timeToFirstToken: number;
+  streamingTokens: number[];
+  streamingPhonemes: string;
+  streamingCallback: ((phonemes: string) => void) | null;
+
+
   constructor() {
     this.session = null;
     this.isModelLoaded = false;
@@ -168,7 +183,7 @@ class KokoroOnnx {
       this.currentModelId = modelId;
       console.log('Model loaded successfully:', modelId);
       return true;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error loading model:', error);
       
       // Provide more detailed error information
@@ -327,8 +342,8 @@ class KokoroOnnx {
     const phonemizedWords = words.map(word => {
       // Check if we have a pre-defined phoneme for this word
       const lowerWord = word.toLowerCase().replace(/[.,!?;:'"]/g, '');
-      if (COMMON_WORD_PHONEMES[lowerWord]) {
-        return COMMON_WORD_PHONEMES[lowerWord];
+      if (lowerWord in COMMON_WORD_PHONEMES) {
+        return COMMON_WORD_PHONEMES[lowerWord as keyof typeof COMMON_WORD_PHONEMES];
       }
       
       // Otherwise, do a simple character-by-character phonemization
@@ -339,8 +354,8 @@ class KokoroOnnx {
         // Check for digraphs (two-letter phonemes)
         if (i < word.length - 1) {
           const digraph = word.substring(i, i + 2).toLowerCase();
-          if (ENGLISH_PHONEME_MAP[digraph]) {
-            phonemes += ENGLISH_PHONEME_MAP[digraph];
+          if (digraph in ENGLISH_PHONEME_MAP) {
+            phonemes += ENGLISH_PHONEME_MAP[digraph as keyof typeof ENGLISH_PHONEME_MAP];
             i += 2;
             continue;
           }
@@ -348,8 +363,8 @@ class KokoroOnnx {
         
         // Check for single character phonemes
         const char = word[i].toLowerCase();
-        if (ENGLISH_PHONEME_MAP[char]) {
-          phonemes += ENGLISH_PHONEME_MAP[char];
+        if (char in ENGLISH_PHONEME_MAP) {
+          phonemes += ENGLISH_PHONEME_MAP[char as keyof typeof ENGLISH_PHONEME_MAP];
         } else if (/[a-z]/.test(char)) {
           // For other alphabetic characters, just use the character itself
           phonemes += char;
