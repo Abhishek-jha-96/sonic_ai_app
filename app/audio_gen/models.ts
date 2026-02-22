@@ -99,7 +99,7 @@ export const getDownloadedModels = async () => {
  * @param {function} progressCallback - Callback for download progress
  * @returns {Promise<boolean>} - Whether the download was successful
  */
-export const downloadModel = async (modelId, progressCallback = null) => {
+export const downloadModel = async (modelId: string, progressCallback = null) => {
   try {
     const model = MODELS[modelId];
     if (!model) {
@@ -136,7 +136,7 @@ export const downloadModel = async (modelId, progressCallback = null) => {
  * @param {string} modelId - The model ID (filename)
  * @returns {Promise<boolean>} - Whether the deletion was successful
  */
-export const deleteModel = async (modelId) => {
+export const deleteModel = async (modelId: string) => {
   try {
     const modelPath = FileSystem.cacheDirectory + modelId;
     await FileSystem.deleteAsync(modelPath);

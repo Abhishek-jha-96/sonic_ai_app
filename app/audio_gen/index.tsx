@@ -1,8 +1,9 @@
 import VoiceCard from "@/components/ui/voice/voiceCard";
-import { VoiceName } from "@/constants/voices";
+import { DEFAULT_MODEL_ID, VoiceName } from "@/constants/voices";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { router } from "expo-router";
-import { useState } from "react";
+import { Directory, Paths, File } from "expo-file-system";
+import { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -10,6 +11,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
+import { getDownloadedModels } from "./models";
 
 const voices = [
   "adam",
@@ -26,6 +28,67 @@ const voices = [
 export default function AudioGen() {
   const [scriptText, setScriptText] = useState("");
   const [selectedVoice, setSelectedVoice] = useState<VoiceName | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedModelId, setSelectedModelId] =
+    useState<string>(DEFAULT_MODEL_ID);
+  const [downloadedVoices, setDownloadedVoices] = useState<Set<string>>(
+    new Set(),
+  );
+  const [downloadedModels, setDownloadedModels] = useState<string[]>([]);
+  const [isModelDownloaded, setIsModelDownloaded] = useState(false);
+
+  useEffect(() => {
+    checkDownloadedModels();
+    checkDownloadedVoices();
+  }, []);
+
+  const checkDownloadedVoices = async () => {
+    try {
+      const voicesDir = new Directory(Paths.document, "voices");
+
+      if (!(await voicesDir.exists)) {
+        return;
+      }
+
+      const voiceFiles = await voicesDir.list();
+      const voices = new Set<string>();
+
+      voiceFiles.forEach((entry) => {
+        if (entry instanceof File && entry.name.endsWith(".bin")) {
+          const voiceId = entry.name.replace(".bin", "");
+          voices.add(voiceId);
+        }
+      });
+
+      setDownloadedVoices(voices);
+      console.log("Downloaded voices:", voices);
+    } catch (err) {
+      console.error("Error checking downloaded voices:", err);
+    }
+  };
+
+  const checkDownloadedModels = async () => {
+    try {
+      const models = await getDownloadedModels();
+      setDownloadedModels(models);
+
+      if (models.length > 0) {
+        // If the default model is downloaded, select it
+        if (models.includes(DEFAULT_MODEL_ID)) {
+          setSelectedModelId(DEFAULT_MODEL_ID);
+        } else {
+          // Otherwise select the first downloaded model
+          setSelectedModelId(models[0]);
+        }
+        setIsModelDownloaded(true);
+      } else {
+        setIsModelDownloaded(false);
+      }
+    } catch (err) {
+      console.error("Error checking downloaded models:", err);
+      setError("Error checking downloaded models");
+    }
+  };
 
   const handleBackPress = () => {
     router.push("/home");
@@ -156,5 +219,5 @@ const styles = StyleSheet.create({
     fontFamily: "Sans",
     fontSize: 16,
     fontWeight: "semibold",
-  }
+  },
 });

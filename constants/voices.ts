@@ -11,3 +11,6 @@ export const VOICE_ICONS = {
 } as const;
 
 export type VoiceName = keyof typeof VOICE_ICONS;
+
+
+export const DEFAULT_MODEL_ID = 'model_q8f16.onnx';

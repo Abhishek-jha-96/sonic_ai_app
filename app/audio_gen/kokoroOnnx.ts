@@ -1,6 +1,5 @@
 import * as FileSystem from 'expo-file-system';
 import { InferenceSession, Tensor } from 'onnxruntime-react-native';
-import { Audio } from 'expo-av';
 import { Platform } from 'react-native';
 import { getVoiceData } from './voices';
 
@@ -264,7 +263,7 @@ class KokoroOnnx {
    * @param {string} voiceId The voice ID to download
    * @returns {Promise<boolean>} Whether the voice was downloaded successfully
    */
-  async downloadVoice(voiceId) {
+  async downloadVoice(voiceId: string) {
     try {
       // Check if voice directory exists
       const voiceDirPath = `${FileSystem.documentDirectory}voices`;
@@ -310,7 +309,7 @@ class KokoroOnnx {
    * @param {string} text The input text
    * @returns {string} Normalized text
    */
-  normalizeText(text) {
+  normalizeText(text: string) {
     // Remove leading/trailing whitespace
     text = text.trim();
     
@@ -331,7 +330,7 @@ class KokoroOnnx {
    * @param {string} text The input text
    * @returns {string} Phonemized text
    */
-  phonemize(text) {
+  phonemize(text: string) {
     // Normalize the text first
     text = this.normalizeText(text);
     
@@ -398,7 +397,7 @@ class KokoroOnnx {
    * @param {string} phonemes The phonemized text
    * @returns {number[]} Tokenized input
    */
-  tokenize(phonemes) {
+  tokenize(phonemes: string) {
     // If input is regular text, phonemize it first
     if (!/[ɑɐɒæəɘɚɛɜɝɞɨɪʊʌɔˈˌː]/.test(phonemes)) {
       phonemes = this.phonemize(phonemes);
@@ -434,7 +433,7 @@ class KokoroOnnx {
    * @param {number} speed The speaking speed (0.5-2.0)
    * @returns {Promise<Audio.Sound>} The generated audio as an Expo Audio Sound object
    */
-  async generateAudio(text, voiceId = 'af_heart', speed = 1.0) {
+  async generateAudio(text: string, voiceId = 'af_heart', speed = 1.0) {
     if (!this.isOnnxAvailable) {
       throw new Error('ONNX Runtime is not available on this platform');
     }
@@ -512,7 +511,7 @@ class KokoroOnnx {
    * @param {function} onProgress Callback for streaming progress updates
    * @returns {Promise<void>}
    */
-  async streamAudio(text, voiceId = 'af_heart', speed = 1.0, onProgress = null) {
+  async streamAudio(text: string, voiceId = 'af_heart', speed = 1.0, onProgress = null) {
     if (this.isStreaming) {
       await this.stopStreaming();
     }
@@ -630,7 +629,7 @@ class KokoroOnnx {
    * @param {Float32Array} floatArray The float array containing audio data
    * @returns {Promise<string>} URI to the temporary audio file
    */
-  async _floatArrayToAudioFile(floatArray) {
+  async _floatArrayToAudioFile(floatArray: Float32Array) {
     try {
       // 1. Convert float array to WAV format
       const wavBuffer = this._floatArrayToWav(floatArray, SAMPLE_RATE);
@@ -659,7 +658,7 @@ class KokoroOnnx {
    * @param {ArrayBuffer} buffer The buffer to convert
    * @returns {string} Base64 string
    */
-  _arrayBufferToBase64(buffer) {
+  _arrayBufferToBase64(buffer: ArrayBuffer) {
     const bytes = new Uint8Array(buffer);
     let binary = '';
     for (let i = 0; i < bytes.byteLength; i++) {
@@ -674,7 +673,7 @@ class KokoroOnnx {
    * @param {number} sampleRate The sample rate of the audio
    * @returns {ArrayBuffer} WAV buffer
    */
-  _floatArrayToWav(floatArray, sampleRate) {
+  _floatArrayToWav(floatArray: Float32Array, sampleRate: number) {
     // Convert float array to Int16Array (16-bit PCM)
     const numSamples = floatArray.length;
     const int16Array = new Int16Array(numSamples);
